@@ -11,6 +11,35 @@ module Drupal
       end
     "
   end
+  
+  class PostHook
+    attr_accessor :cls, :proc
+    
+    def load
+      cls.class_eval &proc
+    end
+        
+    def initialize cls, proc
+      self.cls  = cls
+      self.proc = proc
+    end
+  end
+  
+  def self.hooks
+    @hooks||= []
+    @hooks
+  end
+  
+  def self.hooks= hook
+    hooks
+    @hooks << hook
+  end
+end
+
+module DataMapper::Resource::ClassMethods
+  def post_drupal &blk
+    Drupal.hooks = Drupal::PostHook.new self, blk
+  end
 end
 
 $:<< File.expand_path(Pathname.new(__FILE__).dirname)

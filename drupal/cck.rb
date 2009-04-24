@@ -51,10 +51,9 @@ module Drupal
             r = "belongs_to :#{field_name},
               :class_name => 'Drupal::User'"
           end
-        # when 'nodereference'
-        #   r = "belongs_to :#{field_name},
-        #     :class_name => 'Drupal::Node', 
-        #     :child_key => [:#{field_name}_nid]"
+        when 'number_integer'
+          r  = "property :#{f}, Integer, 
+                  :field => 'field_#{f}_value'"
         when 'text'
           r  = "property :#{f}, Text, 
                   :field => 'field_#{f}_value'"

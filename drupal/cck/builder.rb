@@ -72,6 +72,10 @@ module Drupal
       end.join("\n") )
   
       eval CCK::Builder.code
+      
+      Drupal.hooks.each do |hook|
+        hook.load
+      end
     end
   end
 end
