@@ -9,7 +9,16 @@ module Drupal
     property :type, String
     property :title, String
     
+    before :save, :assign_vid
     after :save, :write_node_revision
+    
+    def assign_vid
+      return true unless vid.nil? 
+      self.vid ||= Drupal::Node.all.last.nid + 1
+      save!
+      self.vid = nid
+      save!
+    end
     
     def write_node_revision
       find_or_init_node_revision.attributes = {
@@ -30,7 +39,7 @@ module Drupal
     end
     
     def node_revision
-      @node_revision ||= Drupal::NodeRevision.get nid
+      @node_revision ||= Drupal::NodeRevision.get vid
     end
   end
   
@@ -38,8 +47,8 @@ module Drupal
     eval Drupal.common
     storage_names[:drupal] = 'node_revisions'
 
-    property :nid, Serial
-    property :vid, Integer
+    property :vid, Serial
+    property :nid, Integer
     property :uid, Integer
     property :title, String
     property :body, Text

@@ -15,6 +15,14 @@ module Drupal
       end      
     end
     
+    class ContentType
+      eval Drupal.common
+      storage_names[:drupal] = 'node_type'
+      
+      property :content_type, String,
+        :key => true, :field => 'type'
+    end
+    
     class ContentNodeFieldInstance
       eval Drupal.common
       storage_names[:drupal] = 'content_node_field_instance'

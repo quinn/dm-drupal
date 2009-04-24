@@ -9,11 +9,22 @@ module Drupal
       end
 
       def self.types
-        @types ||= Drupal::Repository.adapter.query('select type from node').uniq
+        @types ||= ContentType.all.map{|t| t.content_type }
       end
 
       def self.fields
         @fields ||= Drupal::Repository.adapter.query('show tables').select{|t| t.match(/^content_field/)}
+      end
+      
+      module InstanceMethods
+        def generate_node
+          return node if node
+          self.node = Node.create! :type => content_type
+          self.vid = node.vid
+          save!
+          self.vid = node.vid
+          save!
+        end
       end
     end
         
@@ -45,13 +56,16 @@ module Drupal
           class #{content_type.camel_case}
             #{Drupal.common}
             storage_names[:drupal] = '#{table}'
-            property :nid, Serial
-            property :vid, Integer
+            property :nid, Integer
+            property :vid, Integer, :key => true
             belongs_to :node,
               :child_key => [:nid]
             #{columns.map{|c| c.to_s}.join "\n"}
             def self.content_type; :#{content_type}; end
+            def content_type; :#{content_type}; end
+            
             extend CCK::FieldMethods
+            include CCK::Builder::InstanceMethods
           end
         "
       end
