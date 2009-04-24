@@ -39,8 +39,14 @@ module Drupal
         when 'userreference'
           if through?
             r = "has 1, :#{f},
-              :class_name => Drupal::#{f.camel_case},
-              :child_key => [:#{field_name}_uid]"
+                   :class_name => Drupal::#{f.camel_case},
+                   :child_key => [:nid]
+                 
+                 has 1, :#{f}_user,
+                   :remote_name => :user,
+                   :class_name => Drupal::User,
+                   :child_key => [:nid],
+                   :through => :#{f}"
           else
             r = "belongs_to :#{field_name},
               :class_name => 'Drupal::User'"
@@ -49,15 +55,15 @@ module Drupal
         #   r = "belongs_to :#{field_name},
         #     :class_name => 'Drupal::Node', 
         #     :child_key => [:#{field_name}_nid]"
-        # else
-        #   r = "property :#{field_name}, #{type}"
-        #   r += ", :field => '#{field_name}_value'"
+        when 'text'
+          r  = "property :#{f}, Text, 
+                  :field => 'field_#{f}_value'"
         end
         r
       end
       
       def through?
-        false
+        Drupal::CCK::Builder.fields.include? "content_#{field_name}"
       end
     end
     

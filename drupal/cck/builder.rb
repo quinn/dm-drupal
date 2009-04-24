@@ -42,7 +42,7 @@ module Drupal
 
       def to_s
         "
-          class #{type.camel_case}
+          class #{content_type.camel_case}
             #{Drupal.common}
             storage_names[:drupal] = '#{table}'
             property :nid, Serial
