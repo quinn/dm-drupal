@@ -18,18 +18,18 @@ module Drupal
     end
         
     class Table
-      attr_accessor :type
+      attr_accessor :content_type
 
-      def initialize type
-        self.type = type
+      def initialize content_type
+        self.content_type = content_type
       end
 
       def table
-        "content_type_#{type}"
+        "content_type_#{content_type}"
       end
       
       def fields
-        Drupal::CCK::ContentNodeFieldInstance.all :type_name => type
+        Drupal::CCK::ContentNodeFieldInstance.all :content_type => content_type
       end
       
       def columns
@@ -50,7 +50,7 @@ module Drupal
             belongs_to :node,
               :child_key => [:nid]
             #{columns.map{|c| c.to_s}.join "\n"}
-            def self.type; :#{type}; end
+            def self.content_type; :#{content_type}; end
             extend CCK::FieldMethods
           end
         "

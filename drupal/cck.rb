@@ -21,8 +21,9 @@ module Drupal
       
       property :field_name, String,
         :length => 32, :key => true
-      property :type_name, String,
-        :length => 32, :key => true
+      property :content_type, String,
+        :length => 32, :key => true,
+        :field => 'type_name'
         
       def field
         @field ||= ContentNodeField.first :field_name => field_name
