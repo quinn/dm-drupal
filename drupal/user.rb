@@ -4,9 +4,14 @@ module Drupal
     storage_names[:drupal] = 'users'
 
     property :uid, Serial
+    
     property :name, String,
       :length => 60,
       :nullable => false
+    
+    property :mail, String,
+      :length => 64
+    
     has n, :nodes, 
       :child_key => [:uid],
       :repository => Drupal::Repository
