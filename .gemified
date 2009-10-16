@@ -1,0 +1,6 @@
+--- 
+:version: 0.0.1
+:email: q.shanahan@gmail.com
+:summary: drupal database wrapper for datamapper
+:author: quinn shanahan
+:name: dm-drupal
