@@ -1,0 +1,19 @@
+== DM Drupal ==
+
+Its a Datamapper wrapper for a drupal+cck database.
+
+lots of eval right now. sorry.
+
+== Using Hooks ==
+
+this is for associating with dynamic cck fields that don't exist when the app loads.
+
+class BlogPost
+  include DataMapper::Resource  
+  post_drupal do
+    has 1, :drupal_blog_post,
+      :repository => repository(:drupal),
+      :class_name => 'Drupal::BlogPost',
+      :child_key => ['legacy_blog_post_id']
+  end
+end

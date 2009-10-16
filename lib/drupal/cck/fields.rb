@@ -38,6 +38,7 @@ module Drupal
             #{Drupal.common}
             storage_names[:drupal] = '#{table}'
             
+            property :vid, Integer, :key => true
             belongs_to :node,
               :class_name => 'Drupal::Node',
               :child_key => [:nid]
