@@ -36,11 +36,20 @@ module Drupal
   end
 end
 
-module DataMapper::Resource::ClassMethods
-  def post_drupal &blk
-    Drupal.hooks = Drupal::PostHook.new self, blk
+# have to change this.. something broke somewhere (is sad)
+module DataMapper::Resource::DrupalHook
+  def self.included model
+    model.class_eval do
+      def self.post_drupal &blk
+        Drupal.hooks = Drupal::PostHook.new self, blk
+      end
+    end
   end
 end
+
+# module DataMapper::Resource
+#   extend DataMapper::Resource::ClassMethods
+# end
 
 $:<< File.expand_path(Pathname.new(__FILE__).dirname)
 require 'drupal/user'

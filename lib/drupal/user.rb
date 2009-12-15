@@ -7,7 +7,7 @@ module Drupal
     
     property :name, String,
       :length => 60,
-      :nullable => false
+      :required => true
     
     property :mail, String,
       :length => 64
